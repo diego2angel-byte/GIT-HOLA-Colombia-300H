@@ -1,0 +1,218 @@
+<h4 class="mb-3">Gestion de usuarios</h4>
+
+<!-- ============ CREAR ============ -->
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-body">
+    <h6 class="mb-3">Crear usuario</h6>
+    <div class="row g-2 align-items-end">
+      <div class="col-md-4">
+        <label class="form-label small">user_name (correo)</label>
+        <input type="email" class="form-control" [(ngModel)]="nuevo.user_name" placeholder="correo@dominio.com" />
+      </div>
+      <div class="col-md-3">
+        <label class="form-label small">Contrasena</label>
+        <div class="input-group">
+          <input [type]="verPasswordNuevo ? 'text' : 'password'" class="form-control" [(ngModel)]="nuevo.password"
+                 placeholder="********" autocomplete="new-password" />
+          <button class="btn btn-outline-secondary" type="button" (click)="verPasswordNuevo = !verPasswordNuevo"
+                  [attr.aria-label]="verPasswordNuevo ? 'Ocultar contrasena' : 'Mostrar contrasena'"
+                  [title]="verPasswordNuevo ? 'Ocultar contrasena' : 'Mostrar contrasena'">
+            <i class="bi" [class.bi-eye]="!verPasswordNuevo" [class.bi-eye-slash]="verPasswordNuevo"></i>
+          </button>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label small">Rol</label>
+        <select class="form-select" [(ngModel)]="nuevo.rol">
+          <option *ngFor="let r of rolesDisponibles" [value]="r">{{ r }}</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <label class="form-label small">Activo</label>
+        <select class="form-select" [(ngModel)]="nuevo.Activo">
+          <option value="Si">Si</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+    </div>
+    <div class="row g-2 align-items-center mt-1">
+      <div class="col-md-6 d-flex align-items-center flex-wrap gap-2">
+        <input #inputFotoNueva type="file" hidden accept=".jpg,.jpeg,image/jpeg" (change)="seleccionarFoto($event, 'nuevo')" />
+        <button type="button" class="btn btn-outline-primary btn-sm" (click)="inputFotoNueva.click()">
+          <i class="bi bi-camera me-1"></i>SUBA FOTO
+        </button>
+        <span class="fw-bold small" [class.text-success]="nuevaFoto" [class.text-danger]="!nuevaFoto">
+          {{ nuevaFoto ? 'CON FOTO' : 'SIN FOTO' }}
+        </span>
+        <span class="text-muted small">(JPG, max 2 MB)</span>
+        <img *ngIf="nuevaFotoPreview" [src]="nuevaFotoPreview" alt="Vista previa" class="rounded border"
+             style="height: 48px; width: 48px; object-fit: cover;" />
+        <button *ngIf="nuevaFoto" type="button" class="btn btn-sm btn-link p-0" (click)="limpiarFoto('nuevo')">Quitar</button>
+      </div>
+      <div class="col-md-2 ms-md-auto">
+        <button class="btn btn-primary w-100" (click)="crear()">Crear</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ EDITAR (rol / Activo) ============ -->
+<div class="card shadow-sm border-0 mb-4 border-start border-warning border-4" *ngIf="editando">
+  <div class="card-body">
+    <h6 class="mb-3">Editar usuario</h6>
+    <div class="row g-3 align-items-start">
+      <div class="col-md-2 text-center">
+        <img *ngIf="editFotoPreview || fotoUrl(editando)" [src]="editFotoPreview || fotoUrl(editando)" alt="Foto"
+             class="rounded border" style="height: 120px; width: 120px; object-fit: cover;" />
+        <div *ngIf="!editFotoPreview && !fotoUrl(editando)"
+             class="rounded border bg-light d-flex align-items-center justify-content-center mx-auto text-muted"
+             style="height: 120px; width: 120px;">
+          <i class="bi bi-person-fill fs-1"></i>
+        </div>
+        <div class="small text-muted mt-1">{{ editFotoPreview ? 'Foto nueva (sin guardar)' : 'Foto actual' }}</div>
+      </div>
+      <div class="col-md-10">
+        <div class="row g-2 align-items-end">
+          <div class="col-md-4">
+            <label class="form-label small">user_name (no editable)</label>
+            <input type="text" class="form-control" [value]="editando.user_name" disabled />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label small">Rol</label>
+            <select class="form-select" [(ngModel)]="editRol">
+              <option *ngFor="let r of rolesDisponibles" [value]="r">{{ r }}</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label small">Activo</label>
+            <select class="form-select" [(ngModel)]="editActivo">
+              <option value="Si">Si</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label small">Foto (JPG, max 2 MB)</label>
+            <div class="d-flex align-items-center flex-wrap gap-2">
+              <input #inputFotoEdit type="file" hidden accept=".jpg,.jpeg,image/jpeg" (change)="seleccionarFoto($event, 'edit')" />
+              <button type="button" class="btn btn-outline-primary btn-sm" (click)="inputFotoEdit.click()">
+                <i class="bi bi-camera me-1"></i>SUBA FOTO
+              </button>
+              <span class="fw-bold small" [class.text-success]="editFoto || editando.archivo_foto"
+                    [class.text-danger]="!editFoto && !editando.archivo_foto">
+                {{ (editFoto || editando.archivo_foto) ? 'CON FOTO' : 'SIN FOTO' }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex gap-2 mt-3">
+          <button class="btn btn-warning" (click)="guardarEdicion()">Actualizar</button>
+          <button class="btn btn-outline-secondary" (click)="cancelarEditar()">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ RESTABLECER PASSWORD ============ -->
+<div class="card shadow-sm border-0 mb-4 border-start border-info border-4" *ngIf="usuarioPassword">
+  <div class="card-body">
+    <h6 class="mb-3">Restablecer contrasena de {{ usuarioPassword.user_name }}</h6>
+    <div class="row g-2 align-items-end">
+      <div class="col-md-4">
+        <label class="form-label small">Nueva contrasena</label>
+        <div class="input-group">
+          <input [type]="verPasswordReset ? 'text' : 'password'" class="form-control" [(ngModel)]="passwordNueva"
+                 placeholder="********" autocomplete="new-password" />
+          <button class="btn btn-outline-secondary" type="button" (click)="verPasswordReset = !verPasswordReset"
+                  [attr.aria-label]="verPasswordReset ? 'Ocultar contrasena' : 'Mostrar contrasena'"
+                  [title]="verPasswordReset ? 'Ocultar contrasena' : 'Mostrar contrasena'">
+            <i class="bi" [class.bi-eye]="!verPasswordReset" [class.bi-eye-slash]="verPasswordReset"></i>
+          </button>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label small">Confirmar contrasena</label>
+        <div class="input-group">
+          <input [type]="verPasswordConfirmar ? 'text' : 'password'" class="form-control" [(ngModel)]="passwordConfirmar"
+                 placeholder="********" autocomplete="new-password" />
+          <button class="btn btn-outline-secondary" type="button" (click)="verPasswordConfirmar = !verPasswordConfirmar"
+                  [attr.aria-label]="verPasswordConfirmar ? 'Ocultar contrasena' : 'Mostrar contrasena'"
+                  [title]="verPasswordConfirmar ? 'Ocultar contrasena' : 'Mostrar contrasena'">
+            <i class="bi" [class.bi-eye]="!verPasswordConfirmar" [class.bi-eye-slash]="verPasswordConfirmar"></i>
+          </button>
+        </div>
+      </div>
+      <div class="col-md-4 d-flex gap-2">
+        <button class="btn btn-info w-100" (click)="guardarPassword()" [disabled]="guardandoPassword">
+          <span *ngIf="guardandoPassword" class="spinner-border spinner-border-sm me-1"></span>Guardar
+        </button>
+        <button class="btn btn-outline-secondary w-100" (click)="cancelarPassword()" [disabled]="guardandoPassword">Cancelar</button>
+      </div>
+    </div>
+    <small class="text-muted d-block mt-2">Al guardar, se le envia un correo de aviso al usuario (sin incluir la contrasena).</small>
+  </div>
+</div>
+
+<!-- ============ LISTADO ============ -->
+<div class="card shadow-sm border-0">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h6 class="mb-0">Usuarios registrados ({{ usuarios.length }})</h6>
+      <button class="btn btn-sm btn-outline-primary" (click)="cargarUsuarios()">
+        <span *ngIf="cargando" class="spinner-border spinner-border-sm me-1"></span>
+        Actualizar listado
+      </button>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-striped align-middle">
+        <thead>
+          <tr>
+            <th style="width: 64px;">foto</th>
+            <th>user_name</th>
+            <th>password</th>
+            <th>rol</th>
+            <th>Activo</th>
+            <th>updatedAt</th>
+            <th style="width: 260px;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let u of usuarios">
+            <td>
+              <img *ngIf="fotoUrl(u); else sinFoto" [src]="fotoUrl(u)" alt="Foto de {{ u.user_name }}"
+                   class="rounded-circle border" style="height: 44px; width: 44px; object-fit: cover;" />
+              <ng-template #sinFoto>
+                <span class="rounded-circle border bg-light d-inline-flex align-items-center justify-content-center text-muted"
+                      style="height: 44px; width: 44px;"><i class="bi bi-person-fill"></i></span>
+              </ng-template>
+            </td>
+            <td>{{ u.user_name }}</td>
+            <td><span class="font-monospace">********</span></td>
+            <td>{{ u.rol }}</td>
+            <td>
+              <span class="badge" [class.bg-success]="u.Activo === 'Si'" [class.bg-secondary]="u.Activo !== 'Si'">
+                {{ u.Activo === 'Si' ? 'Activo' : 'Inactivo' }}
+              </span>
+            </td>
+            <td class="small text-muted">{{ formatearFecha(u.updatedAt) }}</td>
+            <td>
+              <button class="btn btn-sm btn-outline-primary me-1" (click)="abrirEditar(u)">
+                <i class="bi bi-pencil"></i> Editar
+              </button>
+              <button class="btn btn-sm btn-outline-info me-1" (click)="abrirPassword(u)">
+                <i class="bi bi-key"></i> Password
+              </button>
+              <button class="btn btn-sm btn-outline-danger" (click)="eliminar(u)">
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="!usuarios.length">
+            <td colspan="7" class="text-muted text-center">No hay usuarios registrados.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,31 @@
+<div class="container page-content my-5">
+
+  <h2 class="text-center mb-4">Toures Especiales</h2>
+
+  <div class="text-center text-muted" *ngIf="cargando">Cargando toures...</div>
+  <div class="alert alert-warning text-center" *ngIf="error">
+    No se pudieron cargar los toures en este momento. Intenta de nuevo en unos minutos.
+  </div>
+  <p class="text-center text-muted" *ngIf="!cargando && !error && toures.length === 0">
+    Pronto publicaremos nuestros toures especiales.
+  </p>
+
+  <div class="row g-3 row-cols-1 row-cols-sm-2 row-cols-lg-4">
+    <div class="col" *ngFor="let t of toures">
+      <article class="tour-card h-100">
+        <div class="tour-foto">
+          <img [src]="fotoUrl(t)" [alt]="t.nombre" loading="lazy">
+        </div>
+
+        <div class="tour-info">
+          <h3 class="tour-nombre">{{ t.nombre }}</h3>
+          <div class="tour-ciudad"><i class="bi bi-geo-alt-fill"></i> {{ t.ciudad }}</div>
+          <p class="tour-descripcion" [title]="t.descripcion">{{ t.descripcion }}</p>
+          <div class="tour-precio">{{ precio(t) }}</div>
+          <a routerLink="/reservas" [queryParams]="{ tour: t.nombre }" class="btn btn-hc w-100">Reservar Tour</a>
+        </div>
+      </article>
+    </div>
+  </div>
+
+</div>

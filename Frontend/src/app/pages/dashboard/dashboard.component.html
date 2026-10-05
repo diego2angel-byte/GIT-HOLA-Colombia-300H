@@ -1,0 +1,96 @@
+<h4 class="mb-3">Dashboard</h4>
+
+<div class="card shadow-sm border-0 mb-3">
+  <div class="card-body d-flex justify-content-between align-items-center">
+    <div>
+      <i class="bi bi-people-fill me-2 text-primary"></i>
+      <strong>Gestion de usuarios</strong>
+      <span class="text-muted small ms-2">CRUD completo de la base de datos de usuarios</span>
+    </div>
+    <a class="btn btn-primary btn-sm" routerLink="/usuarios-crud">Abrir</a>
+  </div>
+</div>
+
+<div class="card shadow-sm border-0 mb-3">
+  <div class="card-body d-flex justify-content-between align-items-center">
+    <div>
+      <i class="bi bi-calendar-check me-2 text-primary"></i>
+      <strong>Reservas y Contactos</strong>
+      <span class="text-muted small ms-2">CRUD de las reservas y los contactos del sitio</span>
+    </div>
+    <a class="btn btn-primary btn-sm" routerLink="/admin">Abrir</a>
+  </div>
+</div>
+
+<div class="card shadow-sm border-0 mb-3" *ngIf="esAdmin">
+  <div class="card-body d-flex justify-content-between align-items-center">
+    <div>
+      <i class="bi bi-map me-2 text-primary"></i>
+      <strong>Toures Especiales</strong>
+      <span class="text-muted small ms-2">Publica y administra los toures de la pagina /toures2</span>
+    </div>
+    <a class="btn btn-primary btn-sm" routerLink="/admin_toures2">Abrir</a>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-12 col-lg-4" *ngFor="let e of entidades">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-header bg-white d-flex align-items-center">
+        <i class="bi {{ e.icono }} me-2 text-primary"></i>
+        <strong>{{ e.titulo }}</strong>
+      </div>
+      <div class="card-body">
+        <button class="btn btn-sm btn-outline-primary w-100 mb-3" (click)="listarTodos(e)">
+          <span *ngIf="e.cargando" class="spinner-border spinner-border-sm me-1"></span>
+          Listar Todos
+        </button>
+
+        <div class="table-responsive mb-3" style="max-height: 180px; overflow-y: auto;">
+          <table class="table table-sm" *ngIf="e.datos.length">
+            <thead>
+              <tr><th>ID</th><th>Detalle</th></tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let d of e.datos">
+                <td>{{ d.id }}</td>
+                <td class="text-truncate" style="max-width: 140px;">{{ d.nombre || d | json }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="text-muted small mb-0" *ngIf="!e.datos.length">Sin datos cargados.</p>
+        </div>
+
+        <hr />
+        <div class="mb-2">
+          <label class="form-label small mb-1">Guardar nuevo</label>
+          <div class="input-group input-group-sm">
+            <input class="form-control" [(ngModel)]="e.nuevoNombre" placeholder="Nombre" />
+            <button class="btn btn-success" (click)="guardar(e)"><i class="bi bi-plus-lg"></i></button>
+          </div>
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label small mb-1">Actualizar</label>
+          <div class="input-group input-group-sm mb-1">
+            <span class="input-group-text">ID</span>
+            <input class="form-control" [(ngModel)]="e.actualizarId" placeholder="id" />
+          </div>
+          <div class="input-group input-group-sm">
+            <input class="form-control" [(ngModel)]="e.actualizarNombre" placeholder="Nuevo nombre" />
+            <button class="btn btn-warning" (click)="actualizar(e)"><i class="bi bi-pencil"></i></button>
+          </div>
+        </div>
+
+        <div>
+          <label class="form-label small mb-1">Eliminar</label>
+          <div class="input-group input-group-sm">
+            <span class="input-group-text">ID</span>
+            <input class="form-control" [(ngModel)]="e.eliminarId" placeholder="id" />
+            <button class="btn btn-danger" (click)="eliminar(e)"><i class="bi bi-trash"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

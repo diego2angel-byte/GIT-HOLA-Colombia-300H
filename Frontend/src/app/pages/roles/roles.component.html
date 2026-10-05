@@ -1,0 +1,44 @@
+<h4 class="mb-3">Roles</h4>
+
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-body">
+    <h6 class="mb-3">Modificar rol de un usuario</h6>
+    <div class="row g-2 align-items-end">
+      <div class="col-md-5">
+        <label class="form-label small">Usuario</label>
+        <select class="form-select" [(ngModel)]="usuarioSeleccionado">
+          <option value="" disabled selected>Seleccione un usuario</option>
+          <option *ngFor="let u of usuarios" [value]="u._id">{{ u.user_name }} (actual: {{ u.rol }})</option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label small">Rol</label>
+        <select class="form-select" [(ngModel)]="rolSeleccionado">
+          <option value="" disabled selected>Seleccione un rol</option>
+          <option *ngFor="let r of rolesDisponibles" [value]="r">{{ r }}</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <button class="btn btn-primary w-100" (click)="modificar()">Modificar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card shadow-sm border-0">
+  <div class="card-body">
+    <h6 class="mb-3">Usuarios actuales</h6>
+    <table class="table table-striped">
+      <thead>
+        <tr><th>Usuario</th><th>Rol</th><th>Activo</th></tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let u of usuarios">
+          <td>{{ u.user_name }}</td>
+          <td><span class="badge bg-primary">{{ u.rol }}</span></td>
+          <td>{{ u.Activo }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

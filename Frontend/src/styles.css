@@ -1,0 +1,268 @@
+/* ===== HOLA COLOMBIA - Estilos globales (sitio publico + panel de administracion) ===== */
+
+/* ---------- Paleta: amarillos y marrones del logo de Hola Colombia ---------- */
+:root {
+  --hc-amarillo:        #f7d54d; /* amarillo corporativo (navbar, footer, botones) */
+  --hc-amarillo-hover:  #e5c338;
+  --hc-dorado:          #ebbd48;
+  --hc-oliva:           #9d8642;
+  --hc-marron:          #53381d; /* marron del sombrero */
+  --hc-marron-oscuro:   #3e2317;
+  --hc-cafe-negro:      #241713;
+  --hc-crema:           #fff8e1; /* fondo suave del panel */
+  --hc-crema-borde:     #f0e2b0;
+  --hc-texto:           #333333;
+
+  /* Bootstrap: el color "primary" pasa a ser el marron */
+  --bs-primary: #53381d;
+  --bs-primary-rgb: 83, 56, 29;
+  --bs-link-color: #53381d;
+  --bs-link-color-rgb: 83, 56, 29;
+  --bs-link-hover-color: #3e2317;
+  --bs-link-hover-color-rgb: 62, 35, 23;
+}
+
+/* ---------- Botones Bootstrap en la paleta ---------- */
+.btn-primary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--hc-marron);
+  --bs-btn-border-color: var(--hc-marron);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--hc-marron-oscuro);
+  --bs-btn-hover-border-color: var(--hc-marron-oscuro);
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--hc-cafe-negro);
+  --bs-btn-active-border-color: var(--hc-cafe-negro);
+  --bs-btn-disabled-bg: var(--hc-marron);
+  --bs-btn-disabled-border-color: var(--hc-marron);
+  --bs-btn-focus-shadow-rgb: 83, 56, 29;
+}
+.btn-outline-primary {
+  --bs-btn-color: var(--hc-marron);
+  --bs-btn-border-color: var(--hc-marron);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--hc-marron);
+  --bs-btn-hover-border-color: var(--hc-marron);
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--hc-marron-oscuro);
+  --bs-btn-active-border-color: var(--hc-marron-oscuro);
+  --bs-btn-focus-shadow-rgb: 83, 56, 29;
+}
+.btn-warning {
+  --bs-btn-color: var(--hc-cafe-negro);
+  --bs-btn-bg: var(--hc-amarillo);
+  --bs-btn-border-color: var(--hc-amarillo);
+  --bs-btn-hover-color: var(--hc-cafe-negro);
+  --bs-btn-hover-bg: var(--hc-amarillo-hover);
+  --bs-btn-hover-border-color: var(--hc-amarillo-hover);
+  --bs-btn-active-color: var(--hc-cafe-negro);
+  --bs-btn-active-bg: var(--hc-amarillo-hover);
+  --bs-btn-active-border-color: var(--hc-amarillo-hover);
+}
+.btn-info {
+  --bs-btn-color: var(--hc-cafe-negro);
+  --bs-btn-bg: var(--hc-dorado);
+  --bs-btn-border-color: var(--hc-dorado);
+  --bs-btn-hover-color: var(--hc-cafe-negro);
+  --bs-btn-hover-bg: #d9ab38;
+  --bs-btn-hover-border-color: #d9ab38;
+  --bs-btn-active-color: var(--hc-cafe-negro);
+  --bs-btn-active-bg: #d9ab38;
+  --bs-btn-active-border-color: #d9ab38;
+}
+.btn-outline-info {
+  --bs-btn-color: var(--hc-oliva);
+  --bs-btn-border-color: var(--hc-oliva);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--hc-oliva);
+  --bs-btn-hover-border-color: var(--hc-oliva);
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--hc-oliva);
+  --bs-btn-active-border-color: var(--hc-oliva);
+}
+.text-primary { color: var(--hc-marron) !important; }
+.bg-primary { background-color: var(--hc-marron) !important; }
+.border-primary { border-color: var(--hc-marron) !important; }
+.table-warning { --bs-table-bg: #fdf0b8; --bs-table-border-color: var(--hc-crema-borde); }
+.form-control:focus, .form-select:focus {
+  border-color: var(--hc-dorado);
+  box-shadow: 0 0 0 0.25rem rgba(235, 189, 72, 0.35);
+}
+.form-check-input:checked { background-color: var(--hc-marron); border-color: var(--hc-marron); }
+.spinner-border { color: var(--hc-marron); }
+
+/* ---------- Sitio publico ---------- */
+
+/* Carrusel de fondo a pantalla completa */
+#carouselFondo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  overflow: hidden;
+}
+#carouselFondo .carousel-inner,
+#carouselFondo .carousel-item {
+  width: 100%;
+  height: 100vh;
+}
+#carouselFondo .carousel-item img {
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+}
+
+/* Todo el contenido visible va por encima del carrusel */
+nav.navbar,
+main.container,
+footer.footer,
+.page-content {
+  position: relative;
+  z-index: 1;
+}
+
+main.container,
+.page-content {
+  background-color: rgba(255, 255, 255, 0.85);
+  border-radius: 10px;
+  padding: 30px;
+}
+
+.btn-hc {
+  background-color: var(--hc-amarillo);
+  border-color:     var(--hc-amarillo);
+  color:            var(--hc-texto);
+  font-weight:      600;
+}
+.btn-hc:hover {
+  background-color: var(--hc-amarillo-hover);
+  border-color:     var(--hc-amarillo-hover);
+  color:            var(--hc-texto);
+}
+
+/* Navbar activo */
+.nav-link.active {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+/* ---------- Panel de administracion (barra lateral) ---------- */
+.admin-shell {
+  background-color: var(--hc-crema);
+  min-height: 100vh;
+}
+
+.sidebar {
+  min-height: 100vh;
+  width: 230px;
+  flex-shrink: 0;
+  background: linear-gradient(180deg, var(--hc-marron) 0%, var(--hc-marron-oscuro) 100%);
+  color: #fff;
+  padding-top: 1.5rem;
+}
+
+.sidebar .avatar-circle {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 3px solid var(--hc-amarillo);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 0.5rem auto;
+  background: rgba(247, 213, 77, 0.15);
+  color: var(--hc-amarillo);
+  font-size: 2rem;
+}
+
+.sidebar .usuario-nombre {
+  text-align: center;
+  font-weight: 600;
+  color: var(--hc-amarillo);
+  padding: 0 0.5rem;
+  overflow-wrap: anywhere;
+}
+
+.sidebar .usuario-rol {
+  text-align: center;
+  font-size: 0.85rem;
+  opacity: 0.85;
+  margin-bottom: 1.5rem;
+}
+
+.sidebar a.menu-item {
+  display: block;
+  color: #fff;
+  text-decoration: none;
+  font-style: italic;
+  font-weight: 600;
+  padding: 0.55rem 1.25rem;
+  opacity: 0.95;
+  cursor: pointer;
+}
+
+.sidebar a.menu-item:hover {
+  background: rgba(247, 213, 77, 0.2);
+  opacity: 1;
+}
+
+.sidebar a.menu-item.activo {
+  background: var(--hc-amarillo);
+  color: var(--hc-cafe-negro);
+  opacity: 1;
+}
+
+.contenido-principal {
+  flex: 1;
+  min-width: 0;
+  padding: 1.5rem;
+}
+
+.badge-roles-titulo {
+  background: var(--hc-marron);
+  color: #fff;
+  border-radius: 20px;
+  padding: 0.4rem 1.5rem;
+  font-weight: 600;
+}
+
+.tabla-oscura {
+  background-color: var(--hc-marron-oscuro);
+  color: var(--hc-crema);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.tabla-oscura th {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  font-weight: 600;
+}
+
+.tabla-oscura td, .tabla-oscura th {
+  border-color: rgba(255, 255, 255, 0.08);
+  vertical-align: middle;
+}
+
+/* Temporizador de sesion */
+.timer-sesion {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--hc-marron);
+}
+
+.timer-sesion.alerta {
+  color: #dc3545;
+  animation: parpadeo 1s infinite;
+}
+
+@keyframes parpadeo {
+  50% { opacity: 0.3; }
+}
+
+/* Pagina de login */
+.login-fondo {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--hc-amarillo), var(--hc-dorado));
+}

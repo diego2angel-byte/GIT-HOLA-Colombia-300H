@@ -1,0 +1,53 @@
+<div class="container page-content my-5" style="max-width: 600px;">
+  <h2 class="mb-4">Formulario de contacto</h2>
+
+  <div class="alert alert-success" *ngIf="enviado">¡Datos guardados correctamente!</div>
+  <div class="alert alert-danger" *ngIf="error">{{ mensajeError }}</div>
+
+  <form [formGroup]="form" (ngSubmit)="enviar()" novalidate>
+
+    <div class="mb-3">
+      <label class="form-label">Nombre</label>
+      <input type="text" class="form-control" formControlName="nombre"
+             [class.is-invalid]="invalid('nombre')">
+      <div class="invalid-feedback">Por favor ingresa tu nombre.</div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Apellido</label>
+      <input type="text" class="form-control" formControlName="apellido"
+             [class.is-invalid]="invalid('apellido')">
+      <div class="invalid-feedback">Por favor ingresa tu apellido.</div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Edad</label>
+      <input type="number" class="form-control" formControlName="edad"
+             [class.is-invalid]="invalid('edad')">
+      <div class="invalid-feedback">Por favor ingresa una edad válida (1-120).</div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Email</label>
+      <input type="email" class="form-control" formControlName="email"
+             [class.is-invalid]="invalid('email')">
+      <div class="invalid-feedback">Por favor ingresa un email válido.</div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Tour Escogido</label>
+      <select class="form-select" formControlName="tour" [class.is-invalid]="invalid('tour')">
+        <option value="" disabled>Selecciona un tour</option>
+        <option value="bogota_tour">BOGOTA TOUR</option>
+        <option value="bolivar_tour">BOLIVAR TOUR</option>
+        <option value="esmeraldas_tour">ESMERALDAS TOUR</option>
+        <option value="history_and_art">HISTORY & ART</option>
+      </select>
+      <div class="invalid-feedback">Por favor selecciona un tour.</div>
+    </div>
+
+    <img src="assets/QR.jpg" alt="QR Pago" width="100" class="mb-3 d-block">
+
+    <button type="submit" class="btn btn-hc">Enviar</button>
+  </form>
+</div>

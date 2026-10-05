@@ -1,0 +1,155 @@
+<div>
+  <h4 class="mb-3">Reservas y Contactos</h4>
+
+  <div class="alert alert-danger" *ngIf="error">No se pudo conectar con el servidor (http://localhost:3000). Verifica que el backend esté corriendo.</div>
+  <div class="text-muted" *ngIf="cargando">Cargando datos...</div>
+
+  <!-- ================= CONTACTOS ================= -->
+  <h5 class="mt-2">Contactos Registrados</h5>
+
+  <!-- FORMULARIO CREAR / EDITAR CONTACTO -->
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5 class="card-title">{{ editandoContacto ? 'Editar contacto' : 'Nuevo contacto' }}</h5>
+      <form (ngSubmit)="guardarContacto()" #fc="ngForm">
+        <div class="row g-2">
+          <div class="col-md-2">
+            <input class="form-control" name="nombre" placeholder="Nombre" [(ngModel)]="formContacto.nombre" required>
+          </div>
+          <div class="col-md-2">
+            <input class="form-control" name="apellido" placeholder="Apellido" [(ngModel)]="formContacto.apellido" required>
+          </div>
+          <div class="col-md-2">
+            <input class="form-control" type="number" name="edad" placeholder="Edad" [(ngModel)]="formContacto.edad" required>
+          </div>
+          <div class="col-md-3">
+            <input class="form-control" type="email" name="email" placeholder="Email" [(ngModel)]="formContacto.email"
+                   [disabled]="editandoContacto" required>
+          </div>
+          <div class="col-md-2">
+            <input class="form-control" name="tour" placeholder="Tour" [(ngModel)]="formContacto.tour" required>
+          </div>
+          <div class="col-md-1 d-flex align-items-start gap-1">
+            <button class="btn btn-warning" type="submit" [disabled]="fc.invalid">
+              {{ editandoContacto ? 'Actualizar' : 'Guardar' }}
+            </button>
+          </div>
+        </div>
+        <button class="btn btn-link mt-2 p-0" type="button" *ngIf="editandoContacto" (click)="cancelarEdicionContacto()">
+          Cancelar edición
+        </button>
+        <small class="text-muted d-block mt-1" *ngIf="editandoContacto">
+          El email no se puede modificar (es la llave del registro).
+        </small>
+      </form>
+    </div>
+  </div>
+
+  <div class="table-responsive mb-5">
+    <table class="table table-striped table-bordered align-middle" *ngIf="contactos.length > 0; else sinContactos">
+      <thead class="table-warning">
+        <tr><th>#</th><th>Nombre</th><th>Apellido</th><th>Edad</th><th>Email</th><th>Tour</th><th>Fecha de Registro</th><th>Acciones</th></tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of contactos; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ c.nombre }}</td>
+          <td>{{ c.apellido }}</td>
+          <td>{{ c.edad }}</td>
+          <td>{{ c.email }}</td>
+          <td>{{ c.tour }}</td>
+          <td>{{ formatearFecha(c.fechaRegistro) }}</td>
+          <td>
+            <button class="btn btn-sm btn-outline-primary me-1" (click)="editarContacto(c)">Editar</button>
+            <button class="btn btn-sm btn-outline-danger" (click)="eliminarContacto(c)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <ng-template #sinContactos>
+      <p class="text-muted">No hay contactos registrados todavía.</p>
+    </ng-template>
+  </div>
+
+  <!-- ================= RESERVAS ================= -->
+  <h5>Reservas Registradas</h5>
+
+  <!-- FORMULARIO CREAR / EDITAR RESERVA -->
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5 class="card-title">{{ editandoReserva ? 'Editar reserva' : 'Nueva reserva' }}</h5>
+      <form (ngSubmit)="guardarReserva()" #fr="ngForm">
+        <div class="row g-2">
+          <div class="col-md-3">
+            <input class="form-control" name="rnombre" placeholder="Nombre" [(ngModel)]="formReserva.nombre" required>
+          </div>
+          <div class="col-md-3">
+            <input class="form-control" name="rapellido" placeholder="Apellido" [(ngModel)]="formReserva.apellido" required>
+          </div>
+          <div class="col-md-3">
+            <input class="form-control" type="email" name="remail" placeholder="Email" [(ngModel)]="formReserva.email"
+                   [disabled]="editandoReserva" required>
+          </div>
+          <div class="col-md-3">
+            <select class="form-select" name="rtour" [(ngModel)]="formReserva.tour" [required]="!editandoReserva">
+              <option value="" disabled>Selecciona un tour</option>
+              <option *ngIf="tourActualHuerfano" [value]="tourActualHuerfano">{{ tourActualHuerfano }}</option>
+              <optgroup label="Toures Básicos" *ngIf="opcionesTourDe('Toures Básicos').length">
+                <option *ngFor="let o of opcionesTourDe('Toures Básicos')" [value]="o.nombre">{{ o.nombre }}</option>
+              </optgroup>
+              <optgroup label="Toures Especiales" *ngIf="opcionesTourDe('Toures Especiales').length">
+                <option *ngFor="let o of opcionesTourDe('Toures Especiales')" [value]="o.nombre">{{ o.nombre }}</option>
+              </optgroup>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <input class="form-control" type="date" name="rfecha" [(ngModel)]="formReserva.fecha" required>
+          </div>
+          <div class="col-md-3">
+            <input class="form-control" type="time" name="rhora" [(ngModel)]="formReserva.hora" required>
+          </div>
+          <div class="col-md-3 d-flex align-items-start gap-1">
+            <button class="btn btn-warning" type="submit" [disabled]="fr.invalid">
+              {{ editandoReserva ? 'Actualizar' : 'Guardar' }}
+            </button>
+          </div>
+        </div>
+        <button class="btn btn-link mt-2 p-0" type="button" *ngIf="editandoReserva" (click)="cancelarEdicionReserva()">
+          Cancelar edición
+        </button>
+        <small class="text-muted d-block mt-1" *ngIf="editandoReserva">
+          El email no se puede modificar (es la llave del registro).
+        </small>
+        <small class="text-muted d-block mt-1" *ngIf="!editandoReserva">
+          Al guardar una reserva nueva se envia un correo de confirmacion al email registrado.
+        </small>
+      </form>
+    </div>
+  </div>
+
+  <div class="table-responsive mb-5">
+    <table class="table table-striped table-bordered align-middle" *ngIf="reservas.length > 0; else sinReservas">
+      <thead class="table-warning">
+        <tr><th>#</th><th>Nombre</th><th>Apellido</th><th>Email</th><th>Tour</th><th>Fecha</th><th>Hora</th><th>Acciones</th></tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let r of reservas; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ r.nombre }}</td>
+          <td>{{ r.apellido }}</td>
+          <td>{{ r.email }}</td>
+          <td>{{ r.tour || '—' }}</td>
+          <td>{{ r.fecha }}</td>
+          <td>{{ r.hora }}</td>
+          <td>
+            <button class="btn btn-sm btn-outline-primary me-1" (click)="editarReserva(r)">Editar</button>
+            <button class="btn btn-sm btn-outline-danger" (click)="eliminarReserva(r)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <ng-template #sinReservas>
+      <p class="text-muted">No hay reservas registradas todavía.</p>
+    </ng-template>
+  </div>
+</div>

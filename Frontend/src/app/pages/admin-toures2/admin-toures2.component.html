@@ -1,0 +1,114 @@
+<h4 class="mb-3">Toures Especiales</h4>
+
+<!-- ============ CREAR / EDITAR ============ -->
+<div class="card shadow-sm border-0 mb-4" [class.border-start]="editando" [class.border-warning]="editando" [class.border-4]="editando">
+  <div class="card-body">
+    <h6 class="mb-3">{{ editando ? 'Editar tour' : 'Nuevo tour especial' }}</h6>
+
+    <div class="row g-3">
+      <div class="col-lg-8">
+        <div class="row g-2">
+          <div class="col-md-5">
+            <label class="form-label small">Nombre del tour</label>
+            <input class="form-control" [(ngModel)]="nombre" maxlength="120" placeholder="Ej: Cartagena Colonial" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label small">Ciudad</label>
+            <input class="form-control" [(ngModel)]="ciudad" maxlength="80" list="ciudadesSugeridas" placeholder="Ej: Cartagena" />
+            <datalist id="ciudadesSugeridas">
+              <option *ngFor="let c of ciudadesSugeridas" [value]="c"></option>
+            </datalist>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label small">Precio (COP)</label>
+            <div class="input-group">
+              <span class="input-group-text">$</span>
+              <input class="form-control text-end" inputmode="numeric" placeholder="150.000"
+                     [ngModel]="precioTexto" (ngModelChange)="onPrecio($event)" />
+            </div>
+          </div>
+          <div class="col-12">
+            <label class="form-label small">Descripcion (la historia del tour)</label>
+            <textarea class="form-control" rows="5" maxlength="1500" [(ngModel)]="descripcion"
+                      placeholder="Cuenta la historia del tour..."></textarea>
+            <div class="form-text text-end">{{ descripcion.length }} / 1500</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <label class="form-label small">Foto del tour (JPG, max 5 MB)</label>
+        <div class="d-flex align-items-center flex-wrap gap-2 mb-2">
+          <input #inputFoto type="file" hidden accept=".jpg,.jpeg,image/jpeg" (change)="seleccionarFoto($event)" />
+          <button type="button" class="btn btn-outline-primary btn-sm" (click)="inputFoto.click()">
+            <i class="bi bi-camera me-1"></i>SUBA FOTO
+          </button>
+          <span class="fw-bold small" [class.text-success]="tieneFoto" [class.text-danger]="!tieneFoto">
+            {{ tieneFoto ? 'CON FOTO' : 'SIN FOTO' }}
+          </span>
+          <button *ngIf="fotoArchivo" type="button" class="btn btn-sm btn-link p-0" (click)="quitarFotoNueva(true, inputFoto)">Quitar</button>
+        </div>
+        <img *ngIf="fotoMostrada" [src]="fotoMostrada" alt="Foto del tour" class="rounded border w-100"
+             style="max-height: 180px; object-fit: cover;" />
+        <div *ngIf="fotoPreview && editando" class="form-text">Foto nueva (reemplaza a la actual al guardar).</div>
+      </div>
+    </div>
+
+    <div class="d-flex gap-2 mt-3">
+      <button class="btn btn-primary" (click)="guardar()" [disabled]="guardando">
+        <span *ngIf="guardando" class="spinner-border spinner-border-sm me-1"></span>
+        {{ editando ? 'Actualizar' : 'Guardar' }}
+      </button>
+      <button class="btn btn-outline-secondary" *ngIf="editando" (click)="cancelar()" [disabled]="guardando">Cancelar edicion</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ LISTAR TODOS ============ -->
+<div class="card shadow-sm border-0">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h6 class="mb-0">Toures especiales publicados ({{ toures.length }})</h6>
+      <button class="btn btn-sm btn-outline-primary" (click)="listarTodos()">
+        <span *ngIf="cargando" class="spinner-border spinner-border-sm me-1"></span>
+        Listar todos
+      </button>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-striped align-middle">
+        <thead>
+          <tr>
+            <th style="width: 80px;">foto</th>
+            <th>nombre</th>
+            <th>ciudad</th>
+            <th>descripcion</th>
+            <th class="text-end">precio</th>
+            <th style="width: 170px;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let t of toures">
+            <td>
+              <img [src]="fotoUrl(t)" [alt]="t.nombre" class="rounded border"
+                   style="height: 56px; width: 72px; object-fit: cover;" />
+            </td>
+            <td class="fw-semibold">{{ t.nombre }}</td>
+            <td>{{ t.ciudad }}</td>
+            <td class="small text-muted" style="max-width: 320px;">
+              <div style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; white-space: pre-line;">{{ t.descripcion }}</div>
+            </td>
+            <td class="text-end">{{ formatearPrecio(t.precio) }}</td>
+            <td>
+              <button class="btn btn-sm btn-outline-primary me-1" (click)="editar(t)"><i class="bi bi-pencil"></i> Editar</button>
+              <button class="btn btn-sm btn-outline-danger" (click)="eliminar(t)"><i class="bi bi-trash"></i></button>
+            </td>
+          </tr>
+          <tr *ngIf="!toures.length">
+            <td colspan="6" class="text-muted text-center">Aun no hay toures especiales. Crea el primero arriba.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

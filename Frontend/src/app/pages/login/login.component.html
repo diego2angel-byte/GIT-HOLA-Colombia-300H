@@ -1,0 +1,37 @@
+<div class="login-fondo d-flex align-items-center justify-content-center">
+  <div class="card shadow-lg border-0" style="width: 380px;">
+    <div class="card-body p-4">
+      <div class="text-center mb-4">
+        <img src="assets/LOGO.jpg" alt="Hola Colombia" width="96" class="rounded mb-1">
+        <h4 class="mt-2 mb-0">Hola Colombia</h4>
+        <small class="text-muted">Inicie sesion con su cuenta</small>
+      </div>
+
+      <form (ngSubmit)="iniciarSesion()">
+        <div class="mb-3">
+          <label class="form-label">Usuario (correo)</label>
+          <input type="email" class="form-control" name="user_name" [(ngModel)]="user_name" placeholder="correo@dominio.com" required />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Contrasena</label>
+          <div class="input-group">
+            <input [type]="verPassword ? 'text' : 'password'" class="form-control" name="password" [(ngModel)]="password" placeholder="********" required />
+            <button class="btn btn-outline-secondary" type="button" (click)="verPassword = !verPassword"
+                    [attr.aria-label]="verPassword ? 'Ocultar contrasena' : 'Mostrar contrasena'"
+                    [title]="verPassword ? 'Ocultar contrasena' : 'Mostrar contrasena'">
+              <i class="bi" [class.bi-eye]="!verPassword" [class.bi-eye-slash]="verPassword"></i>
+            </button>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary w-100" [disabled]="cargando">
+          <span *ngIf="cargando" class="spinner-border spinner-border-sm me-2"></span>
+          Iniciar sesion
+        </button>
+      </form>
+
+      <div class="text-center mt-3">
+        <a routerLink="/" class="small">Volver al sitio</a>
+      </div>
+    </div>
+  </div>
+</div>

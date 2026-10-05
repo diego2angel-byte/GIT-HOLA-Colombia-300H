@@ -1,0 +1,12 @@
+<div class="container page-content my-5">
+
+  <div class="row mb-5" *ngFor="let tour of toures">
+    <div class="col-md-8">
+      <img [src]="tour.imagen" class="img-fluid rounded mb-3" [alt]="tour.titulo">
+      <h3>{{ tour.titulo }}</h3>
+      <p>{{ tour.descripcion }}</p>
+      <a routerLink="/reservas" [queryParams]="{ tour: tour.titulo }" class="btn btn-hc btn-lg">Reservar Tour</a>
+    </div>
+  </div>
+
+</div>

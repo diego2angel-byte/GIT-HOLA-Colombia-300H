@@ -1,0 +1,74 @@
+<h4 class="mb-3">Usuarios</h4>
+
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-body">
+    <h6 class="mb-3">Crear usuario</h6>
+    <div class="row g-2 align-items-end">
+      <div class="col-md-4">
+        <label class="form-label small">Correo</label>
+        <input type="email" class="form-control" [(ngModel)]="nuevoUserName" placeholder="correo@dominio.com" />
+      </div>
+      <div class="col-md-3">
+        <label class="form-label small">Contrasena</label>
+        <div class="input-group">
+          <input [type]="verNuevoPassword ? 'text' : 'password'" class="form-control" [(ngModel)]="nuevoPassword" placeholder="********" />
+          <button class="btn btn-outline-secondary" type="button" (click)="verNuevoPassword = !verNuevoPassword"
+                  [attr.aria-label]="verNuevoPassword ? 'Ocultar contrasena' : 'Mostrar contrasena'"
+                  [title]="verNuevoPassword ? 'Ocultar contrasena' : 'Mostrar contrasena'">
+            <i class="bi" [class.bi-eye]="!verNuevoPassword" [class.bi-eye-slash]="verNuevoPassword"></i>
+          </button>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label small">Rol</label>
+        <select class="form-select" [(ngModel)]="nuevoRol">
+          <option *ngFor="let r of rolesDisponibles" [value]="r">{{ r }}</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-primary w-100" (click)="crear()">Crear</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card shadow-sm border-0">
+  <div class="card-body">
+    <h6 class="mb-3">Listado de usuarios</h6>
+    <table class="table table-striped align-middle">
+      <thead>
+        <tr>
+          <th>Correo</th>
+          <th>Rol</th>
+          <th>Activo</th>
+          <th style="width: 220px;"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let u of usuarios">
+          <td>{{ u.user_name }}</td>
+          <td>
+            <select class="form-select form-select-sm" [(ngModel)]="u.rol" (ngModelChange)="actualizarRol(u, $event)">
+              <option *ngFor="let r of rolesDisponibles" [value]="r">{{ r }}</option>
+            </select>
+          </td>
+          <td>
+            <button
+              class="btn btn-sm"
+              [class.btn-success]="u.Activo === 'Si'"
+              [class.btn-secondary]="u.Activo !== 'Si'"
+              (click)="alternarActivo(u)"
+            >
+              {{ u.Activo === 'Si' ? 'Activo' : 'Inactivo' }}
+            </button>
+          </td>
+          <td>
+            <button class="btn btn-sm btn-outline-danger" (click)="eliminar(u)">
+              <i class="bi bi-trash"></i> Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

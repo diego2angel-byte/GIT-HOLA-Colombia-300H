@@ -1,0 +1,70 @@
+<div class="container page-content my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <h1 class="text-center mb-4">Reserva tu tour</h1>
+
+      <div class="alert alert-success" *ngIf="exito">
+        ¡Reserva enviada con éxito!
+        <span *ngIf="!avisoCorreo">Te enviamos un correo de confirmación.</span>
+      </div>
+      <div class="alert alert-warning" *ngIf="exito && avisoCorreo">{{ avisoCorreo }}</div>
+      <div class="alert alert-danger"  *ngIf="error">{{ mensajeError }}</div>
+
+      <form [formGroup]="form" (ngSubmit)="confirmar()" novalidate>
+
+        <div class="mb-3">
+          <label class="form-label">Nombre</label>
+          <input type="text" class="form-control" formControlName="nombre"
+                 [class.is-invalid]="invalid('nombre')">
+          <div class="invalid-feedback">Por favor ingresa tu nombre.</div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Apellido</label>
+          <input type="text" class="form-control" formControlName="apellido"
+                 [class.is-invalid]="invalid('apellido')">
+          <div class="invalid-feedback">Por favor ingresa tu apellido.</div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-control" formControlName="email"
+                 [class.is-invalid]="invalid('email')">
+          <div class="invalid-feedback">Por favor ingresa un email válido.</div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Tour</label>
+          <select class="form-select" formControlName="tour" [class.is-invalid]="invalid('tour')">
+            <option value="" disabled>Selecciona un tour</option>
+            <optgroup label="Toures Básicos" *ngIf="opcionesDe('Toures Básicos').length">
+              <option *ngFor="let o of opcionesDe('Toures Básicos')" [value]="o.nombre">{{ o.nombre }}</option>
+            </optgroup>
+            <optgroup label="Toures Especiales" *ngIf="opcionesDe('Toures Especiales').length">
+              <option *ngFor="let o of opcionesDe('Toures Especiales')" [value]="o.nombre">{{ o.nombre }}</option>
+            </optgroup>
+          </select>
+          <div class="invalid-feedback">Por favor selecciona un tour.</div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Fecha de la reserva</label>
+          <input type="date" class="form-control" formControlName="fecha"
+                 [class.is-invalid]="invalid('fecha')">
+          <div class="invalid-feedback">Por favor selecciona una fecha.</div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Hora (8AM a 4PM)</label>
+          <input type="time" class="form-control" formControlName="hora"
+                 [class.is-invalid]="invalid('hora')">
+          <div class="invalid-feedback">Por favor selecciona una hora.</div>
+        </div>
+
+        <button type="submit" class="btn btn-hc w-100" [disabled]="enviando">
+          <span *ngIf="enviando" class="spinner-border spinner-border-sm me-1"></span>Confirmar Reserva
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

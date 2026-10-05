@@ -1,0 +1,38 @@
+<div class="d-flex admin-shell">
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="avatar-circle">
+      <i class="bi bi-person-fill"></i>
+    </div>
+    <div class="usuario-nombre">{{ (usuario$ | async)?.user_name }}</div>
+    <div class="usuario-rol">{{ (usuario$ | async)?.rol }}</div>
+
+    <a class="menu-item" routerLink="/dashboard" routerLinkActive="activo">Dashboard</a>
+    <a class="menu-item" routerLink="/roles" routerLinkActive="activo">Roles</a>
+    <a class="menu-item" routerLink="/apis" routerLinkActive="activo">Apis</a>
+    <a class="menu-item" routerLink="/usuarios" routerLinkActive="activo">Usuarios</a>
+    <a class="menu-item" routerLink="/usuarios-crud" routerLinkActive="activo">Gestion de usuarios</a>
+    <a class="menu-item" routerLink="/admin" routerLinkActive="activo">Reservas y Contactos</a>
+    <a class="menu-item" routerLink="/admin_toures2" routerLinkActive="activo"
+       *ngIf="(usuario$ | async)?.rol === 'admin'">Toures Especiales</a>
+    <a class="menu-item" routerLink="/">Ver sitio</a>
+    <a class="menu-item" (click)="cerrarSesion()">Cerrar Sesion</a>
+  </nav>
+
+  <!-- Contenido -->
+  <div class="contenido-principal w-100">
+    <div class="d-flex justify-content-end align-items-center mb-3">
+      <div class="card px-3 py-2 shadow-sm border-0">
+        <span class="text-muted small">Tiempo de sesion restante</span>
+        <span
+          class="timer-sesion fs-5"
+          [class.alerta]="(segundosRestantes$ | async)! <= 15"
+        >
+          {{ formatearTiempo((segundosRestantes$ | async) || 0) }}
+        </span>
+      </div>
+    </div>
+
+    <router-outlet></router-outlet>
+  </div>
+</div>

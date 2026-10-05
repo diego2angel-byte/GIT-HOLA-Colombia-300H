@@ -1,0 +1,65 @@
+/* Distribucion tipo catalogo: foto arriba y los datos del tour debajo, 4 por fila en pantalla grande */
+.tour-card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--hc-crema-borde);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(62, 35, 23, 0.12);
+}
+
+.tour-foto {
+  aspect-ratio: 1 / 0.95;
+  background: var(--hc-crema);
+  overflow: hidden;
+}
+
+.tour-foto img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tour-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 16px 14px 16px;
+  text-align: center;
+}
+
+.tour-nombre {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--hc-marron-oscuro);
+  margin: 0 0 6px;
+}
+
+.tour-ciudad {
+  font-size: 0.9rem;
+  color: var(--hc-oliva);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.tour-descripcion {
+  font-size: 0.88rem;
+  color: var(--hc-texto);
+  white-space: pre-line;
+  margin: 0 0 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.tour-precio {
+  margin-top: auto;
+  padding-bottom: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--hc-marron);
+}
